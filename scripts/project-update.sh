@@ -602,6 +602,7 @@ perform_update() {
         fi
         # Install/update Claude Code Skills (uses install function since directory was cleaned)
         install_claude_code_skills
+        install_customize_standards_for_tech_stack_command
         install_improve_skills_command
         echo ""
     fi

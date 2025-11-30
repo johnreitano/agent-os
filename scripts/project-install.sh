@@ -170,6 +170,37 @@ load_configuration() {
 # Installation Functions
 # -----------------------------------------------------------------------------
 
+# Install markdownlint config files
+install_markdownlint_configs() {
+    if [[ "$DRY_RUN" != "true" ]]; then
+        print_status "Installing markdownlint config files"
+    fi
+
+    local config_count=0
+    local source="$BASE_DIR/.markdownlint.json"
+    local destinations=(
+        "$PROJECT_DIR/agent-os/.markdownlint.json"
+        "$PROJECT_DIR/.claude/agents/agent-os/.markdownlint.json"
+        "$PROJECT_DIR/.claude/commands/agent-os/.markdownlint.json"
+    )
+    for dest in "${destinations[@]}"; do
+        if [[ -f "$source" ]]; then
+            local installed_file=$(copy_file "$source" "$dest")
+            if [[ -n "$installed_file" ]]; then
+                INSTALLED_FILES+=("$installed_file")
+                ((config_count++)) || true
+            fi
+        fi
+    done
+
+
+    if [[ "$DRY_RUN" != "true" ]]; then
+        if [[ $config_count -gt 0 ]]; then
+            echo "✓ Installed $config_count markdownlint config files"
+        fi
+    fi
+}
+
 # Install standards files
 install_standards() {
     if [[ "$DRY_RUN" != "true" ]]; then
@@ -213,8 +244,9 @@ install_claude_code_commands_with_delegation() {
     mkdir -p "$target_dir"
 
     while read file; do
-        # Process multi-agent command files OR orchestrate-tasks special case
-        if [[ "$file" == commands/*/multi-agent/* ]] || [[ "$file" == commands/orchestrate-tasks/orchestrate-tasks.md ]]; then
+        # Process multi-agent command files OR special cases such as orchestrate-tasks.md or customize-standards-for-tech-stack.md
+        # Note: commands/*/*.md uses && checks because * in bash [[ ]] matches / characters
+        if [[ "$file" == commands/*/multi-agent/* ]] || { [[ "$file" == commands/*/*.md ]] && [[ "$file" != *"/single-agent/"* ]] && [[ "$file" != *"/multi-agent/"* ]]; }; then
             local source=$(get_profile_file "$EFFECTIVE_PROFILE" "$file" "$BASE_DIR")
             if [[ -f "$source" ]]; then
                 # Extract command name from path (e.g., commands/create-spec/multi-agent/create-spec.md -> create-spec)
@@ -247,34 +279,26 @@ install_claude_code_commands_without_delegation() {
     local commands_count=0
 
     while read file; do
-        # Process single-agent command files OR orchestrate-tasks special case
-        if [[ "$file" == commands/*/single-agent/* ]] || [[ "$file" == commands/orchestrate-tasks/orchestrate-tasks.md ]]; then
+        # Process single-agent command files OR special cases such as orchestrate-tasks.md or customize-standards-for-tech-stack.md
+        # Note: commands/*/*.md uses && checks because * in bash [[ ]] matches / characters
+        if [[ "$file" == commands/*/single-agent/* ]] || { [[ "$file" == commands/*/*.md ]] && [[ "$file" != *"/single-agent/"* ]] && [[ "$file" != *"/multi-agent/"* ]]; }; then
             local source=$(get_profile_file "$EFFECTIVE_PROFILE" "$file" "$BASE_DIR")
             if [[ -f "$source" ]]; then
-                # Handle orchestrate-tasks specially (flat destination)
-                if [[ "$file" == commands/orchestrate-tasks/orchestrate-tasks.md ]]; then
-                    local dest="$PROJECT_DIR/.claude/commands/agent-os/orchestrate-tasks.md"
-                    # Compile without PHASE embedding for orchestrate-tasks
-                    local compiled=$(compile_command "$source" "$dest" "$BASE_DIR" "$EFFECTIVE_PROFILE" "")
+                # Only install non-numbered files (e.g., plan-product.md, not 1-product-concept.md)
+                local filename=$(basename "$file")
+                if [[ ! "$filename" =~ ^[0-9]+-.*\.md$ ]]; then
+                    # Use "embed" for single-agent files, empty for direct command files
+                    local phase_mode="embed"
+                    [[ "$file" == *"/single-agent/"* ]] || phase_mode=""
+                    local cmd_name=$(echo "$file" | cut -d'/' -f2)
+                    local dest="$PROJECT_DIR/.claude/commands/agent-os/$cmd_name.md"
+
+                    # Compile with or without PHASE embedding (mode="embed")
+                    local compiled=$(compile_command "$source" "$dest" "$BASE_DIR" "$EFFECTIVE_PROFILE" "$phase_mode")
                     if [[ "$DRY_RUN" == "true" ]]; then
                         INSTALLED_FILES+=("$dest")
                     fi
                     ((commands_count++)) || true
-                else
-                    # Only install non-numbered files (e.g., plan-product.md, not 1-product-concept.md)
-                    local filename=$(basename "$file")
-                    if [[ ! "$filename" =~ ^[0-9]+-.*\.md$ ]]; then
-                        # Extract command name (e.g., commands/plan-product/single-agent/plan-product.md -> plan-product.md)
-                        local cmd_name=$(echo "$file" | sed 's|commands/\([^/]*\)/single-agent/.*|\1|')
-                        local dest="$PROJECT_DIR/.claude/commands/agent-os/$cmd_name.md"
-
-                        # Compile with PHASE embedding (mode="embed")
-                        local compiled=$(compile_command "$source" "$dest" "$BASE_DIR" "$EFFECTIVE_PROFILE" "embed")
-                        if [[ "$DRY_RUN" == "true" ]]; then
-                            INSTALLED_FILES+=("$dest")
-                        fi
-                        ((commands_count++)) || true
-                    fi
                 fi
             fi
         fi
@@ -333,18 +357,14 @@ install_agent_os_commands() {
     local commands_count=0
 
     while read file; do
-        # Process single-agent command files OR orchestrate-tasks special case
-        if [[ "$file" == commands/*/single-agent/* ]] || [[ "$file" == commands/orchestrate-tasks/orchestrate-tasks.md ]]; then
+        # Process single-agent command files OR special cases such as orchestrate-tasks.md or customize-standards-for-tech-stack.md
+        # Note: commands/*/*.md uses && checks because * in bash [[ ]] matches / characters
+        if [[ "$file" == commands/*/single-agent/* ]] || { [[ "$file" == commands/*/*.md ]] && [[ "$file" != *"/single-agent/"* ]] && [[ "$file" != *"/multi-agent/"* ]]; }; then
             local source=$(get_profile_file "$EFFECTIVE_PROFILE" "$file" "$BASE_DIR")
             if [[ -f "$source" ]]; then
-                # Handle orchestrate-tasks specially (preserve folder structure)
-                if [[ "$file" == commands/orchestrate-tasks/orchestrate-tasks.md ]]; then
-                    local dest="$PROJECT_DIR/agent-os/commands/orchestrate-tasks/orchestrate-tasks.md"
-                else
-                    # Extract command name and preserve numbering
-                    local cmd_path=$(echo "$file" | sed 's|commands/\([^/]*\)/single-agent/\(.*\)|\1/\2|')
-                    local dest="$PROJECT_DIR/agent-os/commands/$cmd_path"
-                fi
+                # Extract command name and preserve numbering
+                local cmd_path=$(echo "$file" | sed 's|commands/\([^/]*\)/\(single-agent/\)\{0,1\}\(.*\.md\)|\1/\3|')
+                local dest="$PROJECT_DIR/agent-os/commands/$cmd_path"
 
                 # Compile with workflow and standards injection and PHASE embedding
                 local compiled=$(compile_command "$source" "$dest" "$BASE_DIR" "$EFFECTIVE_PROFILE" "embed")
@@ -408,6 +428,7 @@ perform_installation() {
     if [[ "$DRY_RUN" == "true" ]]; then
         # Collect files without output
         create_agent_os_folder
+        install_markdownlint_configs
         install_standards
 
         # Install Claude Code files if enabled
@@ -419,6 +440,7 @@ perform_installation() {
                 install_claude_code_commands_without_delegation
             fi
             install_claude_code_skills
+            install_customize_standards_for_tech_stack_command
             install_improve_skills_command
         fi
 
@@ -439,6 +461,9 @@ perform_installation() {
         create_agent_os_folder
         echo ""
 
+        install_markdownlint_configs
+        echo ""
+
         install_standards
         echo ""
 
@@ -454,6 +479,7 @@ perform_installation() {
                 echo ""
             fi
             install_claude_code_skills
+            install_customize_standards_for_tech_stack_command
             install_improve_skills_command
             echo ""
         fi
