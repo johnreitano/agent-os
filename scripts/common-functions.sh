@@ -1442,6 +1442,26 @@ install_claude_code_skills() {
     fi
 }
 
+# Install customize-standards-for-tech-stack command
+install_customize_standards_for_tech_stack_command() {
+    local target_dir="$PROJECT_DIR/.claude/commands/agent-os"
+    mkdir -p "$target_dir"
+
+    # Find the customize-standards-for-tech-stack command file
+    local source_file=$(get_profile_file "$EFFECTIVE_PROFILE" "commands/customize-standards-for-tech-stack/customize-standards-for-tech-stack.md" "$BASE_DIR")
+
+    if [[ -f "$source_file" ]]; then
+        local dest="$target_dir/customize-standards-for-tech-stack.md"
+
+        # Compile the command (with workflow and standards injection)
+        local compiled=$(compile_command "$source_file" "$dest" "$BASE_DIR" "$EFFECTIVE_PROFILE")
+
+        if [[ "$DRY_RUN" == "true" ]]; then
+            INSTALLED_FILES+=("$dest")
+        fi
+    fi
+}
+
 # Install improve-skills command (only when Skills are enabled)
 install_improve_skills_command() {
     # Only install if both Claude Code commands AND Skills are enabled
