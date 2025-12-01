@@ -170,10 +170,10 @@ load_configuration() {
 # Installation Functions
 # -----------------------------------------------------------------------------
 
-# Install markdownlint config files
-install_markdownlint_configs() {
+# Install config files for exstensions markdownlint and shellcheck
+install_extension_configs() {
     if [[ "$DRY_RUN" != "true" ]]; then
-        print_status "Installing markdownlint config files"
+        print_status "Installing extension config files"
     fi
 
     local config_count=0
@@ -193,10 +193,19 @@ install_markdownlint_configs() {
         fi
     done
 
+    source="$BASE_DIR/.shellcheckrc"
+    local dest"$PROJECT_DIR/agent-os/.shellcheckrc.json"
+    if [[ -f "$source" ]]; then
+        local installed_file=$(copy_file "$source" "$dest")
+        if [[ -n "$installed_file" ]]; then
+            INSTALLED_FILES+=("$installed_file")
+            ((config_count++)) || true
+        fi
+    fi
 
     if [[ "$DRY_RUN" != "true" ]]; then
         if [[ $config_count -gt 0 ]]; then
-            echo "✓ Installed $config_count markdownlint config files"
+            echo "✓ Installed $config_count extension config files"
         fi
     fi
 }
@@ -428,7 +437,7 @@ perform_installation() {
     if [[ "$DRY_RUN" == "true" ]]; then
         # Collect files without output
         create_agent_os_folder
-        install_markdownlint_configs
+        install_extension_configs
         install_standards
 
         # Install Claude Code files if enabled
@@ -461,7 +470,7 @@ perform_installation() {
         create_agent_os_folder
         echo ""
 
-        install_markdownlint_configs
+        install_extension_configs
         echo ""
 
         install_standards
