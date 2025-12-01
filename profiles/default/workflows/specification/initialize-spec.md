@@ -14,7 +14,9 @@
 
 IF you were given a description of the feature, then use that to initiate a new spec.
 
-OTHERWISE follow these steps to get the description:
+OTHERWISE, if you were given a Linear issue id that matches the regexp `^[A-Z]{3}-\d+$`, then use the contents of the issue id to initiate a new spec. You can retrieve these contents with the command `linearis issues read <linear-issue-id>` where `<linear-issue-id>` is the specified ssue id.
+
+OTHERWISE, follow these steps to get the description:
 
 1. Check `@agent-os/product/roadmap.md` to find the next feature in the roadmap.
 2. OUTPUT the following to user and WAIT for user's response:
