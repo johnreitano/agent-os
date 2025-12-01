@@ -27,7 +27,7 @@ NC='\033[0m' # No Color
 print_color() {
     local color=$1
     shift
-    echo -e "${color}$@${NC}"
+    echo -e "${color}$*${NC}"
 }
 
 # Print section header
