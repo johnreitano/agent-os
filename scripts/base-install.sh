@@ -146,8 +146,12 @@ get_all_repo_files() {
     fi
 
     # Debug: Show first 500 chars of response
-    print_verbose "Response preview: ${response:0:500}"
+    print_verbose "Response preview: ${response}"
 
+    # count hte lines in response
+    local line_count=$(echo "$response" | wc -l)
+    print_verbose "Line count: $line_count"
+    
     if echo "$response" | grep -q '"message"'; then
         local error_msg=$(echo "$response" | grep -o '"message":"[^"]*"' | sed 's/"message":"//' | sed 's/"$//')
         print_verbose "GitHub API error: $error_msg"
@@ -584,10 +588,16 @@ overwrite_config() {
     if download_file "config.yml" "$BASE_DIR/config.yml"; then
         print_verbose "  Downloaded: config.yml"
     fi
+    if download_file ".markdownlint.json" "$BASE_DIR/.markdownlint.json"; then
+        print_verbose "  Downloaded: .markdownlint.json"
+    fi
+    if download_file ".shellcheckrc" "$BASE_DIR/.shellcheckrc"; then
+        print_verbose "  Downloaded: .shellcheckrc"
+    fi
 
-    echo "✓ Updated config.yml"
+    echo "✓ Updated config.yml, .markdownlint.json and .shellcheckrc"
     echo ""
-    print_success "Config has been updated!"
+    print_success "Config files have been updated!"
 }
 
 # -----------------------------------------------------------------------------
