@@ -1437,7 +1437,7 @@ install_claude_code_skills() {
     if [[ "$DRY_RUN" != "true" ]]; then
         if [[ $skills_count -gt 0 ]]; then
             echo "✓ Installed $skills_count Claude Code Skills"
-            echo -e "${YELLOW}  👉 Be sure to run the /improve-skills command next using Claude Code${NC}"
+            # echo -e "${YELLOW}  👉 Be sure to run the /improve-skills command next using Claude Code${NC}"
         fi
     fi
 }

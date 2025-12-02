@@ -1,4 +1,4 @@
-## Customeize standards for the project's tech stack
+## Customize standards for the project's tech stack
 
 Update the standards under `agent-os/standards/**/*.md` based on well-known best practices for the technologies that comprise this project's tech stack.
 
@@ -18,13 +18,13 @@ Update the value of the property `profile` in `agent-os/config.yml` with this ge
 
 ### Step 2: Customize standards
 
-Where possible, replace the generalized content of the standards described in the files `standards/**/*.md` with content specific to the technologies described in `agent-os/product/tech-stack.md`. This new content should be written in such a way that when subsequently used in a prompt to generate code, the code will comply with the well-known best practices for the  technologies of the tech stack. Think ultrahard.
+Where possible, customize the generalized content of the standards described in the files `agent-os/standards/**/*.md` with content specific to the technologies described in `agent-os/product/tech-stack.md`. This new content should be written in such a way that when subsequently used in a prompt to generate code, the code will comply with the well-known best practices for the technologies of the tech stack. Think hard about this.
 
 **Verification required:** Confirm customization edits were successfully applied to all relevant files before proceeding.
 
 ### Step 3: Refine standards
 
-Next update the standards (in `profiles/[descriptive-profile-name]/standards/**/*.md`) to comply with the guidelines below.
+Next update the standards (in `agent-os/standards/**/*.md`) to comply with the guidelines below.
 
 #### Keep standards concise
 
@@ -32,12 +32,24 @@ Ensure the new standards are written in such a way that they do not use any more
 
 #### Keep standards modular
 
-Use modular files that are specific and focused files rather than monolithic. Bad: A monolithic file such as `standards/all-standards.md`. Good: Modules such as `standards/frontend/react-hooks.md`, `standards/frontend/component-props.md`, `standards/frontend/state-management.md`, `standards/frontend/styling.md`, `standards/backend/api.md`, `standards/backend/migrations.md`
+Use modular files that are specific and focused files rather than monolithic. 
+- Bad: A monolithic file such as `agent-os/standards/all-standards.md`. 
+- Good: Modules such as the following:
+    - `agent-os/standards/frontend/react-hooks.md`
+    - `agent-os/standards/frontend/component-props.md`
+    - `agent-os/standards/frontend/state-management.md`
+    - `agent-os/standards/frontend/styling.md`
+    - `agent-os/standards/backend/api.md`
+    - `agent-os/standards/backend/migrations.md`
 
 #### Be specific and actionable
 
-Keep standards clear and implementable. Bad: Vague standards such as "Write clean code with good naming". Good: Specific standards such as: "Use camelCase for variables Use descriptive names (getUserById not getUser) Prefix booleans with is/has/should"
+Keep standards clear and implementable. Bad: Vague standards such as "Write clean code with good naming". Good: Specific standards such as: "Use camelCase for variables. Use descriptive names (getUserById not getUser). Prefix booleans with is/has/should."
 
 #### Provide Examples
 
-Always provide examples of how to follow the standard
+Always provide concise examples of how to follow the standard
+
+### Step 4: Improve associated skills
+
+Improve description and content of ALL skills in the folder `~/.claude/skills/` by running the command `/agent-os:improve-skills`

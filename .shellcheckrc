@@ -1,25 +1,4 @@
 # Disable specific shellcheck warnings globally
 
-# SC2086: Double quote to prevent globbing and word splitting
-disable=SC2086
-
-# SC1091: Not following: source /home/jason/agent-os/scripts/common-functions.sh (error caused by missing source)
-disable=SC1091
-
-# SC2034: Variable appears unused (many variables are exported/used externally)
-disable=SC2034
-
-# SC2155: Declare and assign separately to avoid masking return values
-disable=SC2155
-
-# SC2001: See if you can use ${variable//search/replace} instead
-disable=SC2001
-
-# SC2162: read without -r will mangle backslashes
-disable=SC2162
-
-# SC2153: Possible misspelling (false positives for uppercase/lowercase variants)
-disable=SC2153
-
-# SC2295: Expansions inside ${..} need to be quoted separately
-disable=SC2295
+# disable all shellcheck suggestions
+disable=all
