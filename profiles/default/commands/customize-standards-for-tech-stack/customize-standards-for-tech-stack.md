@@ -18,7 +18,10 @@ Update the value of the property `profile` in `agent-os/config.yml` with this ge
 
 ### Step 2: Customize standards
 
-Where possible, customize the generalized content of the standards described in the files `agent-os/standards/**/*.md` with content specific to the technologies described in `agent-os/product/tech-stack.md`. This new content should be written in such a way that when subsequently used in a prompt to generate code, the code will comply with the well-known best practices for the technologies of the tech stack. Think hard about this.
+The content in the files `agent-os/standards/**/*.md` can be divided into three categories:
+    1. Content that can usefully be updated or extended to be specific to the technologies in this project's tech stack (`agent-os/product/tech-stack.md`). Update or extend this content in such a way that when subsequently used in a prompt to generate code, the code will comply with the well-known best practices for the technologies of the tech stack
+    2. Content that doesn't need to be customized because it is already applicable as is to the tech stack. Leave this content unchanged. For example, this category likely inludes the content related to version control (`standards/global/version-control.md`).
+    3. Content that should be removed because it is not applicable to the tech stack. Remove this content.
 
 **Verification required:** Confirm customization edits were successfully applied to all relevant files before proceeding.
 
