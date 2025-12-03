@@ -19,9 +19,9 @@ Update the value of the property `profile` in `agent-os/config.yml` with this ge
 ### Step 2: Customize standards
 
 The content in the files `agent-os/standards/**/*.md` can be divided into three categories:
-    1. Content that can usefully be updated or extended to be specific to the technologies in this project's tech stack (`agent-os/product/tech-stack.md`). Update or extend this content in such a way that when subsequently used in a prompt to generate code, the code will comply with the well-known best practices for the technologies of the tech stack
-    2. Content that doesn't need to be customized because it is already applicable as is to the tech stack. Leave this content unchanged. For example, this category likely inludes the content related to version control (`standards/global/version-control.md`).
-    3. Content that should be removed because it is not applicable to the tech stack. Remove this content.
+    1. Content that can usefully be updated or extended to be specific to the technologies in this project's tech stack (`agent-os/product/tech-stack.md`). Update or extend this content in such a way that when subsequently used in a prompt to generate code, the code will comply with the well-known best practices for the relevant technologies. For example, the generic statement to "Use consistent indentation (spaces or tabs) and configure your editor/linter to enforce it" in `standards/global/coding-style.md` should be changed to make more specific recommendations for the language(s) used in the project's tech stack.
+    2. Content that doesn't need to be customized because it is already applicable, as is, to the tech stack. Leave this content unchanged. For example, this category would include the all of the content in the version control standards (`standards/global/version-control.md`) for most projects.
+    3. Content that should be removed because it is not applicable to the tech stack. Remove this content. For example, the recommendation to "Use Transactions for Related Changes" in `standards/backend/queries.md` should be removed for an app that has a first-class design principle of using a read-only database.
 
 **Verification required:** Confirm customization edits were successfully applied to all relevant files before proceeding.
 
