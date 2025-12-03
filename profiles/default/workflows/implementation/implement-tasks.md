@@ -15,6 +15,7 @@ Implement all tasks assigned to you and ONLY those task(s) that have been assign
 
 ## Self-verify and test your work by:
 - Running ONLY the tests you've written (if any) and ensuring those tests pass.
+- Making sure that there are no linting/formatting errors.
 - IF your task involves user-facing UI, and IF you have access to browser testing tools, open a browser and use the feature you've implemented as if you are a user to ensure a user can use the feature in the intended way.
   - Take screenshots of the views and UI elements you've tested and store those in `agent-os/specs/[this-spec]/verification/screenshots/`.  Do not store screenshots anywhere else in the codebase other than this location.
   - Analyze the screenshot(s) you've taken to check them against your current requirements.
