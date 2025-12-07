@@ -1443,7 +1443,7 @@ install_claude_code_skills() {
 }
 
 # Install customize-standards-for-tech-stack command
-install_customize_standards_for_tech_stack_command() {
+install_customized_standards_for_tech_stack_command() {
     local target_dir="$PROJECT_DIR/.claude/commands/agent-os"
     mkdir -p "$target_dir"
 

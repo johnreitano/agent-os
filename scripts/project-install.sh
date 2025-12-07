@@ -457,7 +457,7 @@ perform_installation() {
                 install_claude_code_commands_without_delegation
             fi
             install_claude_code_skills
-            install_customize_standards_for_tech_stack_command
+            install_customized_standards_for_tech_stack_command
             install_improve_skills_command
         fi
 
@@ -497,7 +497,7 @@ perform_installation() {
                 echo ""
             fi
             install_claude_code_skills
-            install_customize_standards_for_tech_stack_command
+            install_customized_standards_for_tech_stack_command
             install_improve_skills_command
             echo ""
         fi
