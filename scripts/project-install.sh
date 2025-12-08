@@ -201,20 +201,22 @@ install_markdownlint() {
 }
 
 # update gitignore file
-update_gitignore() {
+install_misc_files() {
     if [[ "$DRY_RUN" != "true" ]]; then
-        print_status "Updating gitignore file"
+        print_status "Installing gitignore and README files"
     fi
 
     local dest="$PROJECT_DIR/.gitignore"
-    touch "$dest"
-
     if [[ "$DRY_RUN" != "true" ]]; then
-      # check if .playwright-mcp is already in the file
-      if ! grep -q ".playwright-mcp" "$dest"; then
-        echo -e "\n# Playwright MCP\n.playwright-mcp" >> "$dest"
-      fi
+        touch "$dest"
+        if ! grep -q ".playwright-mcp" "$dest"; then
+            echo -e "\n# Playwright MCP\n.playwright-mcp" >> "$dest"
+        fi
     fi
+
+    local source="$BASE_DIR/README-FOR-PROJECT.md"
+    local dest="$PROJECT_DIR/agent-os/README.md"
+    copy_file "$source" "$dest"
 }
 
 # Install standards files
@@ -445,7 +447,7 @@ perform_installation() {
         # Collect files without output
         create_agent_os_folder
         install_markdownlint
-        update_gitignore
+        install_misc_files
         install_standards
 
         # Install Claude Code files if enabled
@@ -479,7 +481,7 @@ perform_installation() {
         echo ""
 
         install_markdownlint
-        update_gitignore
+        install_misc_files
         echo ""
 
         install_standards
