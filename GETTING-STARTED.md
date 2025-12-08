@@ -19,3 +19,6 @@ Files will be installed into the following directories:
 
 For more options, run `~/agent-os/scripts/project --help`
 
+## Project Config
+
+Once Agent OS is installed in your project, configure it by folling the steps in [README-FOR-PROJECT.md](README-FOR-PROJECT.md)
