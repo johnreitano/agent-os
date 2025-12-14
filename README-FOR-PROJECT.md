@@ -2,26 +2,26 @@
 
 ## Project Config
 
-- Configure core project info:
-    - `/agent-os:plan-product`
-    - generates `agent-os/project/{mission,roadmap,tech-stack}.md`
+- Configure core project info
+    - In Claude Code, run: `/agent-os:plan-product`
+    - Generates `agent-os/project/{mission,roadmap,tech-stack}.md`
 
 - Customize standards for your tech stack
-    - `/agent-os:customize-standards-for-tech-stack`
-    - generates `agent-os/standards/**/*.md`  (review these carefully!)
+    - In Claude Code, run: `/agent-os:customize-standards-for-tech-stack`
+    - Generates `agent-os/standards/**/*.md`  (review these carefully!)
 
 ## Build a feature
 
 - Create the spec
-    - `/agent-os:create-spec`
-    - asks clarifying questions
-    - generates
+    - In Claude Code, run: `/agent-os:create-spec`
+    - Asks clarifying questions
+    - Generates
         - `spec/my-new-feauture/requirements.md`
         - `spec/my-new-feauture/spec.md` (review this carefully!)
 - Create the tasks
-    - `/agent-os:create-tasks`
-    - generates `spec/my-new-feauture/tasks.md`
+    - In Claude Code, run: `/agent-os:create-tasks`
+    - Generates `spec/my-new-feauture/tasks.md`
 - Implement the tasks
-    - `/agent-os:implement-tasks`
-    - generates code for your feature (review this carefully!)
+    - In Claude Code, run: `/agent-os:implement-tasks`
+    - Generates code for your feature (review this carefully!)
     
